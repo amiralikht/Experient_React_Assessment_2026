@@ -1,23 +1,21 @@
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+import { useState } from "react";
+import UserAutoComplete from "./components/UserAutoComplete"
+import useUsers from "./hooks/useUsers";
+import type { ApiUser } from "./types";
+import UserDetails from "./components/UserDetails";
 
 
 function App() {
-  const options = [
-    { label: 'The Godfather', id: 1 },
-    { label: 'Pulp Fiction', id: 2 },
-  ];
+  const { users, error } = useUsers();
+  const [selected, setSelected] = useState<ApiUser | null>(null);
+
   return (
     <>
       <section className='center'>
-        <Autocomplete
-          disablePortal
-          options={options}
-          sx={{ width: 300 }}
-          renderInput={(params) => 
-            <TextField {...params} label="Movie" />
-          }
-        />
+        <UserAutoComplete users={users}
+          error={error}
+          onSelect={setSelected}/>
+        <UserDetails user={selected}/>
       </section>
     </>
   )
